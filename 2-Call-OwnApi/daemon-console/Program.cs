@@ -21,8 +21,10 @@ tokenAcquirerFactory.Services.AddLogging(
 // Create a downstream API service named 'MyApi' which comes loaded with several
 // utility methods to make HTTP calls to the DownstreamApi configurations found
 // in the "MyWebApi" section of your appsettings.json file.
-tokenAcquirerFactory.Services.AddDownstreamApi("MyApi",
-    tokenAcquirerFactory.Configuration.GetSection("MyWebApi"));
+tokenAcquirerFactory.Services.AddDownstreamApi("MyApi", tokenAcquirerFactory.Configuration.GetSection("MyWebApi"));
+
+//.Services.AddDownstreamApi("MyApi2", tokenAcquirerFactory.Configuration.GetSection("MyWebApi2"));
+
 var sp = tokenAcquirerFactory.Build();
 
 // Extract the downstream API service from the 'tokenAcquirerFactory' service provider.
@@ -32,4 +34,10 @@ var api = sp.GetRequiredService<IDownstreamApi>();
 // acquisition is handled automatically based on the configurations in your
 // appsettings.json file.
 var result = await api.GetForAppAsync<IEnumerable<TodoItem>>("MyApi");
+var answer = await api.GetForAppAsync<string>("MyApi", options =>
+{
+    options.RelativePath = $"api/todolist/getall";
+});
+
+//var result2 = await api.GetForAppAsync<IEnumerable<TodoItem>>("MyApi2");
 Console.WriteLine($"result = {result?.Count()}");

@@ -35,5 +35,12 @@ namespace TodoList_WebApi.Controllers
         {
             return Ok(TodoStore.Values);
         }
+        // GET: api/todolist/getall
+        [HttpGet("getall")]
+        [RequiredScopeOrAppPermission(AcceptedAppPermission = new[] {"DaemonAppRole2"})]
+        public IActionResult GetAll()
+        {
+            return Ok("This is a test");
+        }
     }
 }
